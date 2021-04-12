@@ -113,7 +113,7 @@ module "gke" {
     module.bastion,
   ]
   source = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster"
-
+  version = "14.0.1"
   project_id = module.enabled_google_apis.project_id
   name       = var.cluster_name
   region     = var.region

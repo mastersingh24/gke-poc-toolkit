@@ -75,11 +75,23 @@ The code in the `scripts` directory generates and populates terraform variable i
   * subnets
   * firewall rules
 
-In the root of this repository, there is a script to create the cluster:
+Store external IP as local variable ```AUTH_IP```:
 
 ```shell
 # export your Public IP Address
 export AUTH_IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+```
+
+Verify ```AUTH_IP``` stored your external IP address before moving forward. If not, use an alternate means to update ```AUTH_IP``` with the external IP address for the console: 
+
+```shell
+# Check AUTH_IP for external IP
+echo $AUTH_IP
+```
+In the root of this repository, there is a script to create the cluster:
+
+```shell
+# Create cluster
 make create CLUSTER=public
 ```
 
