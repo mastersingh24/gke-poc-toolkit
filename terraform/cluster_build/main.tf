@@ -142,7 +142,7 @@ module "kms" {
   version           = "~> 2.0"
   project_id        = var.governance_project_id
   location          = var.region
-  keyring           = local.gke_keyring_name}
+  keyring           = local.gke_keyring_name
   keys              = ["${local.gke_key_name}"]
   set_owners_for    = ["${local.gke_key_name}"]
   owners            = [
