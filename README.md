@@ -93,7 +93,7 @@ The following best practices are also enforced as part of the cluster build proc
 
 ## Harden GKE Security
 
-[Centralized Logs](docs/SECURITY.md)
+[GKE Cluster Hardening Instructions](docs/SECURITY.md)
 
 Once the cluster is created, the [Harden GKE Security](docs/SECURITY.md) step can be executing against the existing environment. Doing so will layer on the following items to expand security considerations for the cluster:
 
