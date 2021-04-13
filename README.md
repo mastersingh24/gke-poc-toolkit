@@ -32,9 +32,11 @@ The [Deploy a Cluster](docs/CLUSTERS.md) step in this repository will build a GK
 
 The following best practices are also enforced as part of the cluster build process:
 
-* The build process generates a service account used for running the GKE nodes. This service account operates under the concept of [Least Privilege](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa) and only has permissions needed for sending logging data, metrics, and downloading containers from the given GCR project. 
+* [Least Privilege Service Accounts](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa)
+  * The build process generates a service account used for running the GKE nodes. This service account operates under the concept of least privilege and only has permissions needed for sending logging data, metrics, and downloading containers from the given GCR project. 
 
-* [Application Layer Secrets](https://cloud.google.com/kubernetes-engine/docs/how-to/encrypting-secrets#overview) are used to provide an additional layer of security for sensitive data stored in etcd. The build process creates a [Cloud KMS](https://cloud.google.com/kms/docs) used to store the Key Encrption Key (KEK) used to encrypt data at the application layer. 
+* [Application Layer Secrets](https://cloud.google.com/kubernetes-engine/docs/how-to/encrypting-secrets#overview):
+  * Application Layer Secrets are used to provide an additional layer of security for sensitive data stored in etcd. The build process creates a [Cloud KMS](https://cloud.google.com/kms/docs) which stores the Key Encrption Key (KEK) used to encrypt data at the application layer. 
 
 Once the cluster is created, the [Harden GKE Security](docs/SECURITY.md) step can be executing against the existing environment. Doing so will layer on the following items to expand security considerations for the cluster:
 
