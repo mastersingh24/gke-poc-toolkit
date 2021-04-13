@@ -52,7 +52,8 @@ variable "project_services" {
 
   default = [
     "storage.googleapis.com",
-    "iap.googleapis.com"
+    "iap.googleapis.com",
+    "cloudkms.googleapis.com",
 
   ]
   description = <<-EOF
@@ -60,8 +61,8 @@ variable "project_services" {
   EOF
 }
 
-variable "log_project" {
-  description = "The project to use for log sinks"
+variable "governance_project" {
+  description = "The project to use for governance resources such as kvm and log sinks"
   type        = string
 }
 
