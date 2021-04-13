@@ -17,12 +17,6 @@ project = toolkit-sandbox
 Your active configuration is: [default]
 ```
 
-An additional environment variable for the destination project is also required, this can be a seperate project or your existing project:
-
-```shell
-export LOG_PROJECT=<project-name>
-```
-
 ## Securing the Cluster
 
 

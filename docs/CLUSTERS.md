@@ -17,6 +17,12 @@ project = toolkit-sandbox
 Your active configuration is: [default]
 ```
 
+An additional environment variable for the governance project is also required. This project will be used to host resources such as the KVM and log sinks. As a best practice it is recommended that a separate project is used, however, the existing project can be used for testing purposes:
+
+```shell
+export GOVERNANCE_PROJECT=<project-name>
+```
+
 ## GKE Cluster with Private Endpoint
 
 This cluster features both private nodes and a private control plane node.
