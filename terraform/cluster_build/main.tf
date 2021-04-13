@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-module "enabled_google_apis" {
+
+ module "enabled_google_apis" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 10.0"
 
@@ -31,6 +31,17 @@ module "enabled_google_apis" {
     "binaryauthorization.googleapis.com",
     "stackdriver.googleapis.com",
     "iap.googleapis.com",
+  ]
+}
+ 
+module "enabled_governance_apis" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 10.0"
+
+  project_id                  = var.governance_project_id
+  disable_services_on_destroy = false
+
+  activate_apis = [
     "cloudkms.googleapis.com",
   ]
 }
@@ -119,7 +130,7 @@ module "bastion" {
 
 module "service_accounts" {
   source        = "terraform-google-modules/service-accounts/google"
-  version       = "~> 4.0"
+  version       = "~> 3.0"
   project_id    = module.enabled_google_apis.project_id
   display_name  = "GKE cluster service account"
   names         = [local.gke_service_account]
@@ -153,6 +164,7 @@ module "kms" {
 module "gke" {
   depends_on = [
     module.bastion,
+    module.service_accounts,
     module.kms,
   ]
   source = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster"
