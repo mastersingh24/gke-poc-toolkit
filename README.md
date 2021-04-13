@@ -16,43 +16,6 @@ Private clusters also restrict access to the internet by default. A NAT gateway 
 
 ![Private Cluster Architecture](/assets/private-cluster.svg)
 
-The [Deploy a Cluster](docs/CLUSTERS.md) step in this repository will build a GKE Private cluster with access to the control plane restricted in one of two configurations:
-
-* [Private Endpoint](docs/CLUSTERS.md#GKE-Cluster-with-private-endpoint):
-  * Public endpoint for control plane is disabled
-  * Nodes receive private IP addresses
-  * Restricts access to addresses specified in the authorized networks list
-  * Authorized networks range must containe internal IP addresses
-
-* [Public Endpoint](docs/CLUSTERS.md#GKE-Cluster-with-public-endpoint):
-  * Public endpoint for control plane is enabled
-  * Nodes receive private IP addresses
-  * Restricts access to addresses specified in the authorized networks list
-  * Authorized networks range can contain internal or public IP addresses
-
-The following best practices are also enforced as part of the cluster build process:
-
-* [Least Privilege Service Accounts](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa)
-  * The build process generates a service account used for running the GKE nodes. This service account operates under the concept of least privilege and only has permissions needed for sending logging data, metrics, and downloading containers from the given GCR project. 
-
-* [Application Layer Secrets](https://cloud.google.com/kubernetes-engine/docs/how-to/encrypting-secrets#overview):
-  * Application Layer Secrets are used to provide an additional layer of security for sensitive data stored in etcd. The build process creates a [Cloud KMS](https://cloud.google.com/kms/docs) which stores the Key Encrption Key (KEK) used to encrypt data at the application layer. 
-
-Once the cluster is created, the [Harden GKE Security](docs/SECURITY.md) step can be executing against the existing environment. Doing so will layer on the following items to expand security considerations for the cluster:
-
-* [Audit Logging](docs/SECURITY.md#Audit-Logging)
-  * Creates Log Sinks and BigQuery Datasets for Cloud Audit Logs and GKE Audit Logs
-
-* [RBAC](docs/SECURITY.md#RoleBased-Access-Control)
-  * Maps GCP Service Accounts to Kubernetes ClusterRoles
-  * 2 Service Accounts created with identical GCP IAM Roles
-  * Individually mapped to Kubernetes Roles of Viewer and Editor
-
-* [Workload Identity](docs/SECURITY.md#Workload-Identity)
-  * Maps a GCP Service Account to Kubernetes Service Account
-  * GCP Service Account has GCS Storage Permissions and Workload Identity 
-  * 2 Identical Kubernetes deployments with different Kubernetes Service Accounts
-
 ## Pre-requisites
 
 The steps described in this document require the installation of several tools and the proper configuration of authentication to allow them to access your GCP resources.
@@ -106,7 +69,44 @@ The Terraform configuration will execute against your GCP environment and create
 
 [GKE Cluster Install Instructions](docs/CLUSTERS.md)
 
+The [Deploy a Cluster](docs/CLUSTERS.md) step in this repository will build a GKE Private cluster with access to the control plane restricted in one of two configurations:
+
+* [Private Endpoint](docs/CLUSTERS.md#GKE-Cluster-with-private-endpoint):
+  * Public endpoint for control plane is disabled
+  * Nodes receive private IP addresses
+  * Restricts access to addresses specified in the authorized networks list
+  * Authorized networks range must containe internal IP addresses
+
+* [Public Endpoint](docs/CLUSTERS.md#GKE-Cluster-with-public-endpoint):
+  * Public endpoint for control plane is enabled
+  * Nodes receive private IP addresses
+  * Restricts access to addresses specified in the authorized networks list
+  * Authorized networks range can contain internal or public IP addresses
+
+The following best practices are also enforced as part of the cluster build process:
+
+* [Least Privilege Service Accounts](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa)
+  * The build process generates a service account used for running the GKE nodes. This service account operates under the concept of least privilege and only has permissions needed for sending logging data, metrics, and downloading containers from the given GCR project. 
+
+* [Application Layer Secrets](https://cloud.google.com/kubernetes-engine/docs/how-to/encrypting-secrets#overview):
+  * Application Layer Secrets are used to provide an additional layer of security for sensitive data stored in etcd. The build process creates a [Cloud KMS](https://cloud.google.com/kms/docs) which stores the Key Encrption Key (KEK) used to encrypt data at the application layer. 
+
 ## Harden GKE Security
 
 [Centralized Logs](docs/SECURITY.md)
+
+Once the cluster is created, the [Harden GKE Security](docs/SECURITY.md) step can be executing against the existing environment. Doing so will layer on the following items to expand security considerations for the cluster:
+
+* [Audit Logging](docs/SECURITY.md#Audit-Logging)
+  * Creates Log Sinks and BigQuery Datasets for Cloud Audit Logs and GKE Audit Logs
+
+* [RBAC](docs/SECURITY.md#RoleBased-Access-Control)
+  * Maps GCP Service Accounts to Kubernetes ClusterRoles
+  * 2 Service Accounts created with identical GCP IAM Roles
+  * Individually mapped to Kubernetes Roles of Viewer and Editor
+
+* [Workload Identity](docs/SECURITY.md#Workload-Identity)
+  * Maps a GCP Service Account to Kubernetes Service Account
+  * GCP Service Account has GCS Storage Permissions and Workload Identity 
+  * 2 Identical Kubernetes deployments with different Kubernetes Service Accounts
 
