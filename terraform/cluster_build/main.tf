@@ -187,7 +187,7 @@ module "gke" {
   compute_engine_service_account = local.gke_service_account_email
   database_encryption = [{
     state    = "ENCRYPTED"
-    key_name = "${local.database-encryption-key}"
+    key_name = local.database-encryption-key
   }]
 
   node_pools = [
