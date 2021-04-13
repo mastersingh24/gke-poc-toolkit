@@ -51,14 +51,15 @@ data "google_project" "project" {
 }
 
 locals {
-  bastion_name            = format("%s-bastion", var.cluster_name)
-  gke_service_account     = format("%s-sa", var.cluster_name)
-  gke_keyring_name        = format("%s-kr", var.cluster_name)
-  gke_key_name            = format("%s-kek", var.cluster_name)
-  kek_service_account     = format("service-%s@container-engine-robot.iam.gserviceaccount.com", data.google_project.project.number)
-  database-encryption-key = "projects/${var.governance_project_id}/locations/${var.region}/keyRings/${local.gke_keyring_name}/cryptoKeys/${local.gke_key_name}"
-  bastion_zone            = var.zone
-  bastion_members         = [
+  bastion_name              = format("%s-bastion", var.cluster_name)
+  gke_service_account       = format("%s-sa", var.cluster_name)
+  gke_service_account_email = "${local.gke_service_account}@${module.enabled_google_apis.project_id}.iam.gserviceaccount.com"
+  gke_keyring_name          = format("%s-kr", var.cluster_name)
+  gke_key_name              = format("%s-kek", var.cluster_name)
+  kek_service_account       = format("service-%s@container-engine-robot.iam.gserviceaccount.com", data.google_project.project.number)
+  database-encryption-key   = "projects/${var.governance_project_id}/locations/${var.region}/keyRings/${local.gke_keyring_name}/cryptoKeys/${local.gke_key_name}"
+  bastion_zone              = var.zone
+  bastion_members           = [
     format("user:%s", data.google_client_openid_userinfo.me.email),
   ]
 }
@@ -154,8 +155,8 @@ module "kms" {
   project_id        = var.governance_project_id
   location          = var.region
   keyring           = local.gke_keyring_name
-  keys              = ["${local.gke_key_name}"]
-  set_owners_for    = ["${local.gke_key_name}"]
+  keys              = [local.gke_key_name]
+  set_owners_for    = [local.gke_key_name]
   owners            = [
         "serviceAccount:${local.kek_service_account}",
   ]
@@ -183,7 +184,7 @@ module "gke" {
     display_name = "Bastion Host"
   }]
 
-  compute_engine_service_account = "${module.service_accounts.email}"
+  compute_engine_service_account = local.gke_service_account_email
   database_encryption = [{
     state    = "ENCRYPTED"
     key_name = "${local.database-encryption-key}"
