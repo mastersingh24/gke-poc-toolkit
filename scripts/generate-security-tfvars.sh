@@ -62,9 +62,9 @@ if [[ -z "${PROJECT}" ]]; then
     echo "replace 'PROJECT' with the project name." 1>&2
     exit 1;
 fi
-if [[ -z "${LOG_PROJECT}" ]]; then
-    echo "This script requires a project for Logging." 1>&2
-    echo "run 'export LOG_PROJECT=PROJECT'." 1>&2
+if [[ -z "${GOVERNANCE_PROJECT}" ]]; then
+    echo "This script requires a project for governance resources." 1>&2
+    echo "run 'export GOVERNANCE_PROJECT=PROJECT'." 1>&2
     echo "replace 'PROJECT' with the project name." 1>&2
     exit 1;
 fi
@@ -89,6 +89,6 @@ cat <<EOF > "${TFVARS_FILE}"
 project="${PROJECT}"
 zone="${ZONE}"
 region="${REGION}"
-log_project="${LOG_PROJECT}"
+governance_project="${GOVERNANCE_PROJECT}"
 cluster_name="$1-endpoint-cluster"
 EOF
