@@ -165,7 +165,6 @@ module "kms" {
 module "gke" {
   depends_on = [
     module.bastion,
-    module.service_accounts,
     module.kms,
   ]
   source = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster"
